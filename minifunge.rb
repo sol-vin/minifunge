@@ -3,7 +3,7 @@ DEBUG = false
 class Minifunge
   DIRECTIONS = [?>, ?<, ?^, ?v]
   OPERANDS = [?+, ?-, ?*, ?/, ?%]
-  INSTRUCTIONS = [?@, ?!, ?", ?`, ?_, ?_, ?:, ?=, ?$, ?., ?,, ?&, ?~, ?#] + DIRECTIONS + OPERANDS
+  INSTRUCTIONS = [?@, ?!, ?", ?`, ?_, ?_, ?:, ?=, ?$, ?., ?,, ?&, ?~, ?#, ??, ?;] + DIRECTIONS + OPERANDS
   
   attr_reader :code, :current_code, :input, :stack, :position, :direction, :output, :original_input
   
@@ -76,12 +76,12 @@ class Minifunge
         break if get_code == ?"
         @stack << get_code.ord
       end
-    elsif get_code == ?[
+    elsif get_code == ?[ || get_code == ?]
       number = ""
       loop do
         #move first
         move(1)
-        break if get_code == ?]
+        break if get_code == ?] || get_code == ?[
         number += get_code
       end
       @stack << number.to_i

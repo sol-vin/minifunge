@@ -313,4 +313,11 @@ RSpec.describe Minifunge do
     m.run
     expect(m.output).to eq "What what in the butt?"
   end
+
+  it "should repeat input to output backwards" do
+    code = %{v >#@?_ #?,# <\n>#|;_ #;~# <}
+    m = Minifunge.new(code, "Testing Testing 123")
+    m.run
+    expect(m.output).to eq "Testing Testing 123".reverse
+  end
 end
