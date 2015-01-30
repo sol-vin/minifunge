@@ -5,12 +5,13 @@ class Minifunge
   OPERANDS = [?+, ?-, ?*, ?/, ?%]
   INSTRUCTIONS = [?@, ?!, ?", ?`, ?_, ?_, ?:, ?=, ?$, ?., ?,, ?&, ?~, ?#] + DIRECTIONS + OPERANDS
   
-  attr_reader :code, :current_code, :input, :stack, :position, :direction, :output
+  attr_reader :code, :current_code, :input, :stack, :position, :direction, :output, :original_input
   
   def initialize(code, input = "")
     @code = code.lines.map(&:chomp) #keep a copy for later when we modify our own code!
     @current_code = @code.dup 
     @input = input
+    @original_input = input
     @stack = []
     @position = Struct.new(:x, :y).new(0, 0)
     @direction = ?>
@@ -65,9 +66,9 @@ class Minifunge
     elsif get_code == ?,
       @output << @stack.pop.chr
     elsif get_code == ?&
-      @stack << @input.slice!(0).ord
+      @stack << @input.slice!(0).to_i unless @input.length == 0
     elsif get_code == ?~
-      @stack << @input.slice!(0).ord
+      @stack << @input.slice!(0).ord unless @input.length == 0
     elsif get_code == ?"
       loop do
         #move first
@@ -75,6 +76,17 @@ class Minifunge
         break if get_code == ?"
         @stack << get_code.ord
       end
+    elsif get_code == ?[
+      number = ""
+      loop do
+        #move first
+        move(1)
+        break if get_code == ?]
+        number += get_code
+      end
+      @stack << number.to_i
+    elsif get_code == ?;
+      @stack << ((@input.length == 0) ? 1 : 0)
     elsif (?0..?9).include? get_code
       @stack << get_code.to_i
     end
@@ -85,19 +97,24 @@ class Minifunge
   end
   
   def run
-    until get_code == ?@
+    until ended?
       run_one_instruction
     end
     @output
   end
 
   def run_from_beginning
-    @input = input
+    @input = @original_input
     @stack = []
     @position = Struct.new(:x, :y).new(0, 0)
     @direction = ?>
     @output = ""
+    @current_code = @code
     run
+  end
+
+  def ended?
+    get_code == ?@
   end
 end
 
