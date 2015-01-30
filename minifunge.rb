@@ -5,10 +5,11 @@ class Minifunge
   OPERANDS = [?+, ?-, ?*, ?/, ?%]
   INSTRUCTIONS = [?@, ?!, ?", ?`, ?_, ?_, ?:, ?=, ?$, ?., ?,, ?&, ?~, ?#] + DIRECTIONS + OPERANDS
   
-  attr_reader :code, :input, :stack, :position, :direction, :output
+  attr_reader :code, :current_code, :input, :stack, :position, :direction, :output
   
   def initialize(code, input = "")
-    @code = code.lines.map(&:chomp)
+    @code = code.lines.map(&:chomp) #keep a copy for later when we modify our own code!
+    @current_code = @code.dup 
     @input = input
     @stack = []
     @position = Struct.new(:x, :y).new(0, 0)

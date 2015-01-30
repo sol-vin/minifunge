@@ -153,8 +153,24 @@ RSpec.describe Minifunge do
     m.run
     expect(m.stack.last).to eq 7
     
-    m = Minifunge.new ("1#@ #9_")
+    m = Minifunge.new ("1#@X#9_")
     m.run
     expect(m.stack.last).to eq 9
+  end
+  
+  it "should work with vertical if (|)" do
+    m = Minifunge.new ("vX@\nXX7\n>0|\nXX9\nXX@")
+    m.run
+    expect(m.stack.last).to eq 9
+    
+    m = Minifunge.new ("vX@\nXX7\n>1|\nXX9\nXX@")
+    m.run
+    expect(m.stack.last).to eq 7
+  end
+  
+  it "should interpret string mode (\") correctly" do
+    m = Minifunge.new (%{"H"@})
+    m.run
+    expect(m.stack.last).to eq ?H.ord
   end
 end
