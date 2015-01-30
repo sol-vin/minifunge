@@ -274,7 +274,7 @@ RSpec.describe Minifunge do
     expect(m.stack.last).to eq ?A.ord
   end
 
-  it "should push value to stack if input's length is 0 (;)" do
+  it "should push correct value to stack if input's length is 0 (;)" do
     m = Minifunge.new(%{;@}, "A")
     m.run
     expect(m.stack.last).to eq 0
@@ -286,6 +286,16 @@ RSpec.describe Minifunge do
     m = Minifunge.new(%{;@})
     m.run
     expect(m.stack.last).to eq 1
+  end
+
+  it "should push correct value to stack if stack's length is 0 (?)" do
+    m = Minifunge.new(%{?@})
+    m.run
+    expect(m.stack.last).to eq 1
+
+    m = Minifunge.new(%{1?@})
+    m.run
+    expect(m.stack.last).to eq 0
   end
 
   it "should produce Hello, World!" do

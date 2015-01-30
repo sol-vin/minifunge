@@ -87,6 +87,8 @@ class Minifunge
       @stack << number.to_i
     elsif get_code == ?;
       @stack << ((@input.length == 0) ? 1 : 0)
+    elsif get_code == ??
+      @stack << ((@stack.length == 0) ? 1 : 0)
     elsif (?0..?9).include? get_code
       @stack << get_code.to_i
     end
